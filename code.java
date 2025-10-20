@@ -1,5 +1,9 @@
+import java.io.*;
+
 public class code {
     public static void main(String[] args) {
-        System.out.println("„Hello Vistula”");
+        int x=4;
+        x >>= 2;
+        System.out.println(x);
     }
 }
