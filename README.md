@@ -7,7 +7,7 @@
 ## About
 
 This repository contains Java files and tasks I completed while learning programming.  
-It includes exercises on:
+So fat It includes exercises on:
 
 - Calculations and user input  
 - Random number generation  
