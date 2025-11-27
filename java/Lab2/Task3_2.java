@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Task3 {
+public class Task3_2 {
     public static void main(String[] args){
 
         // initializing Random class

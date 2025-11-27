@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Task2 {
+public class Task2_2 {
     public static void main(String[] args) {
 
         // Initial variables declaration
