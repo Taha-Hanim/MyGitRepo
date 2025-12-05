@@ -6,13 +6,7 @@
 
 ## About
 
-This repository contains Java files and tasks I completed while learning programming.  
-So far It includes exercises on:
-
-- Calculations and user input  
-- Random number generation  
-- Using `Scanner` and `BigDecimal`  
-- Basic problem-solving in Java  
+This repository contains Java `files` and `tasks`
 
 ---
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Getting started : Serving Web Content</title>
+</head>
+<body>"
+<h1 th:text="'Hello there '+ ${name} + '!'"> </h1>
+<div class="image-container">
+    <img th:src="@{/images/unnamed.jpg}" width="600" height="600" alt="Image"/>
+</div>
+<!--I'm not sure why I could not call the style file inside the html page
+,so I just pasted it in here-->
+<style>
+    body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+body {
+    display: flex;
+    flex-direction: column
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+img:hover {transform: scale(1.05);}
+.image-container {margin-bottom: 40px;}
+</style>>
+</body>
+</html>
