@@ -1,6 +1,6 @@
 # Spring Boot REST API - Product Management System
 
-A complete Spring Boot REST API application for managing products with H2 database integration, Swagger documentation, and a futuristic web interface.
+A complete Spring Boot REST API application for managing products with H2 database and Swagger documentation and a small web interface .
 
 ## 📋 Features
 - Complete crud operations (create, read, update, delete)
@@ -13,7 +13,7 @@ A complete Spring Boot REST API application for managing products with H2 databa
 
 ### 1. **Swagger API Documentation**
 ![Swagger Documentation](./images/SwaggerInterface.png)
-*Accessible at: http://localhost:8080/swagger-ui.html*
+*Accessible at: http://localhost:8080/swagger-ui/index.html*
 
 ---
 
@@ -39,3 +39,8 @@ A complete Spring Boot REST API application for managing products with H2 databa
 ### 6. **H2 Database Console - Showing Products Table**
 ![H2 Database Console](./images/DataBase.png)
 **What this shows:** H2 Database Console showing the products table with all of the products innit . this shows a successful JPA integration and data persistence.
+
+---
+### 7. **Front-end page**
+![Swagger Documentation](./images/SmallWebSite.png)
+*Accessible at: http://localhost:8080*
