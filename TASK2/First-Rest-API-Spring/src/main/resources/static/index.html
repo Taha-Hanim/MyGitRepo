@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="header fade-in">
+        <h1>NEXUS</h1>
+        <p>Product Management System</p>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="totalProducts">0</div>
+                <div class="stat-label">TOTAL PRODUCTS</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="apiStatus">✓</div>
+                <div class="stat-label">API STATUS</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
+    </div>
+
+    <div class="input-group fade-in">
+        <input type="text"
+               id="productInput"
+               class="input-field"
+               placeholder="Enter product name"
+               onkeypress="if(event.key === 'Enter') addProduct()">
+        <button class="btn" onclick="addProduct()"><i class="fas fa-plus"></i>ADD PRODUCT</button>
+    </div>
+
+    <div class="products-grid" id="productsContainer">
+        <div class="empty-state" id="emptyState">
+            <i class="fas fa-cube"></i>
+            <h3>No products found</h3>
+            <p>Add your first product to get started</p>
+        </div>
+    </div>
+</div>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    :root {
+        --neon-blue: #00f3ff;
+        --neon-purple: #9d00ff;
+        --neon-pink: #ff00ff;
+        --dark-bg: #0a0a0f;
+        --dark-card: #11111f;
+        --dark-border: #222233;
+        --glow-blue: 0 0 20px #00f3ff80;
+        --glow-purple: 0 0 20px #9d00ff80;
+    }
+
+    body {
+        background: var(--dark-bg);
+        color: #fff;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+                radial-gradient(circle at 20% 30%, #9d00ff10 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, #00f3ff10 0%, transparent 50%);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: linear-gradient(145deg, #11111f, #0a0a15);
+        border-radius: 24px;
+        border: 1px solid var(--dark-border);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+                transparent, var(--neon-blue), transparent 30%
+        );
+        animation: rotate 10s linear infinite;
+        z-index: -1;
+    }
+
+    @keyframes rotate {
+        100% { transform: rotate(360deg); }
+    }
+
+    .header h1 {
+        font-size: 3rem;
+        background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        text-shadow: var(--glow-blue);
+    }
+
+    .header p {
+        color: #a0a0c0;
+        font-size: 1.1rem;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .input-field {
+        flex: 1;
+        padding: 1rem 1.5rem;
+        background: var(--dark-card);
+        border: 1px solid var(--dark-border);
+        border-radius: 12px;
+        color: #fff;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: var(--neon-blue);
+        box-shadow: var(--glow-blue);
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--glow-blue), var(--glow-purple);
+    }
+
+    .products-grid {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .product-card {
+        background: var(--dark-card);
+        border: 1px solid var(--dark-border);
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--neon-blue);
+        box-shadow: var(--glow-blue);
+    }
+
+    .product-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, #00f3ff10, transparent);
+        transition: 0.5s;
+    }
+
+    .product-card:hover::before {
+        left: 100%;
+    }
+
+    .product-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: var(--neon-blue);
+    }
+
+    .product-id {
+        font-size: 0.9rem;
+        color: #8888aa;
+        background: #222233;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid var(--dark-border);
+        background: #222233;
+        color: #a0a0c0;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-btn:hover {
+        color: var(--neon-blue);
+        border-color: var(--neon-blue);
+        transform: scale(1.1);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #8888aa;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        color: #222233;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: var(--dark-card);
+        border-radius: 16px;
+        border: 1px solid var(--dark-border);
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+        color: #8888aa;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .search-box {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 1rem 1.5rem 1rem 3rem;
+        background: var(--dark-card);
+        border: 1px solid var(--dark-border);
+        border-radius: 12px;
+        color: #fff;
+        font-size: 1rem;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--neon-blue);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+        }
+
+        .input-group {
+            flex-direction: column;
+        }
+
+        .stats {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .product-card {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .product-actions {
+            justify-content: center;
+        }
+    }
+</style>
+<script>
+    var products = [];
+
+    window.onload = function() {
+        loadProducts();
+        updateStats();
+    };
+
+    function loadProducts() {
+        fetch('/api/v1/products')
+            .then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('API Error');
+                }
+            })
+            .then(function(data) {
+                products = data;
+                renderProducts();
+                updateStats();
+                document.getElementById('apiStatus').textContent = '✓';
+            })
+            .catch(function(error) {
+                document.getElementById('apiStatus').textContent = '✗';
+                alert('Error: Could not load products');
+            });
+    }
+
+    function renderProducts(searchText) {
+        var container = document.getElementById('productsContainer');
+        var filteredProducts = [];
+
+        if (searchText) {
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1) {
+                    filteredProducts.push(products[i]);
+                }
+            }
+        } else {
+            filteredProducts = products;
+        }
+
+        if (filteredProducts.length === 0) {
+            var message = searchText ? 'Try a different search' : 'Add your first product';
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><h3>No products found</h3><p>' + message + '</p></div>';
+            return;
+        }
+
+        var html = '';
+        for (var i = 0; i < filteredProducts.length; i++) {
+            var product = filteredProducts[i];
+            html += '<div class="product-card fade-in">';
+            html += '<div class="product-info">';
+            html += '<h3>' + product.name + '</h3>';
+            html += '<span class="product-id">ID: ' + product.id + '</span>';
+            html += '</div>';
+            html += '<div class="product-actions">';
+            html += '<button class="icon-btn" onclick="editProduct(' + product.id + ')"><i class="fas fa-edit"></i></button>';
+            html += '<button class="icon-btn" onclick="deleteProduct(' + product.id + ')"><i class="fas fa-trash"></i></button>';
+            html += '</div>';
+            html += '</div>';
+        }
+
+        container.innerHTML = html;
+    }
+
+    function addProduct() {
+        var input = document.getElementById('productInput');
+        var name = input.value.trim();
+
+        if (name === '') {
+            alert('Please enter a product name');
+            return;
+        }
+
+        fetch('/api/v1/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name })
+        })
+            .then(function(response) {
+                if (response.ok) {
+                    input.value = '';
+                    loadProducts();
+                    alert('Product added: ' + name);
+                } else {
+                    alert('Failed to add product');
+                }
+            })
+            .catch(function(error) {
+                alert('Error: ' + error.message);
+            });
+    }
+
+    function editProduct(id) {
+        var product = null;
+        for (var i = 0; i < products.length; i++) {
+            if (products[i].id === id) {
+                product = products[i];
+                break;
+            }
+        }
+
+        if (!product) return;
+
+        var newName = prompt('Edit product name:', product.name);
+        if (newName && newName !== product.name) {
+            fetch('/api/v1/products/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newName, id: id })
+            })
+                .then(function(response) {
+                    if (response.ok) {
+                        loadProducts();
+                        alert('Product updated');
+                    } else {
+                        alert('Failed to update product');
+                    }
+                })
+                .catch(function(error) {
+                    alert('Error: ' + error.message);
+                });
+        }
+    }
+
+    function deleteProduct(id) {
+        if (confirm('Are you sure you want to delete this product?')) {
+            fetch('/api/v1/products/' + id, {
+                method: 'DELETE'
+            })
+                .then(function(response) {
+                    if (response.status === 204) {
+                        loadProducts();
+                        alert('Product deleted');
+                    } else {
+                        alert('Failed to delete product');
+                    }
+                })
+                .catch(function(error) {
+                    alert('Error: ' + error.message);
+                });
+        }
+    }
+
+    function filterProducts() {
+        var searchText = document.getElementById('searchInput').value;
+        renderProducts(searchText);
+    }
+
+    function updateStats() {
+        document.getElementById('totalProducts').textContent = products.length;
+    }
+
+    function showNotification(message, isSuccess) {
+        var notif = document.createElement('div');
+        notif.style.cssText = 'position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 8px; color: white; font-weight: bold; z-index: 1000;';
+        notif.style.background = isSuccess ? 'linear-gradient(135deg, #00f3ff, #9d00ff)' : '#ff4757';
+        notif.textContent = message;
+        document.body.appendChild(notif);
+
+        setTimeout(function() {
+            notif.remove();
+        }, 2000);
+    }
+
+    document.getElementById('productInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            addProduct();
+        }
+    });
+
+    setTimeout(function() {
+        if (products.length === 0) {
+            console.log('Welcome to NEXUS Product Manager!');
+        }
+    }, 1000);
+</script>
+</body>
+</html>
