@@ -93,7 +93,7 @@ Interactive API documentation powered by **Swagger / OpenAPI**.
 
 ---
 
-## 🧩 **PostMan: **
+## 🧩 **PostMan:**
 
 ## 📦 **PostMan: Post**
 ![Post UI](./images/Post.png)
