@@ -93,7 +93,7 @@ Interactive API documentation powered by **Swagger / OpenAPI**.
 
 ---
 
-## 🧩 **Code Structure**
+## 🧩 **PostMan: **
 
 ## 📦 **PostMan: Post**
 ![Post UI](./images/Post.png)
@@ -110,6 +110,8 @@ Interactive API documentation powered by **Swagger / OpenAPI**.
 ## ⭐ **PostMan: ExceptionHandling**
 ![Delete UI](./images/ExceptionHandling.png)
 ---
+
+## 🧩 **Code Structure**
 
 ### 📦 Entity Layer
 Represents the database model and defines JPA mappings used by Hibernate.
