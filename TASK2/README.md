@@ -88,7 +88,9 @@ Interactive API documentation powered by **Swagger / OpenAPI**.
 
 ### ▶️ the Application interface
 <h2>This is a small Front-end page that's linked to the whole project where you can see and edit the products</h2>
-![Application UI](./images/SmallWebSite.png)
+
+![Application UI](./images/WebSite.png)
+
 ---
 
 ## 🧩 **Code Structure**
