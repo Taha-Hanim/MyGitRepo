@@ -5,9 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version> <!--when i use the version 4.0.1, i get an error in the
-                                     localhost:8080/swagger-ui/index.html, so i switched
-                                     to an old version and it worked perfectly fine-->
+        <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.edu.vistula</groupId>
